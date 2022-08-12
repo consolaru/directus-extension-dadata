@@ -1,0 +1,16 @@
+# Main
+/node_modules/
+/tmp/
+
+# Editor directories and files
+.idea
+.vscode
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
