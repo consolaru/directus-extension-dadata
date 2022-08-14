@@ -19,7 +19,7 @@
     </template>
     <v-list v-if="suggestions.length > 0">
       <v-list-item v-for="item of suggestions" :key="item.data.inn" @click="() => choose(item)">
-        <v-list-item-content>{{ item.value }}</v-list-item-content>
+        <v-list-item-content>ИНН: {{ item.data.inn }}, {{ item.value }}</v-list-item-content>
       </v-list-item>
     </v-list>
   </v-menu>
@@ -55,7 +55,7 @@ const options = {
 }
 
 async function fetchSuggestionsRaw (input: string) {
-  if (!input) {
+  if (input.length < 3) {
     suggestions.value = []
     return
   }
@@ -70,22 +70,30 @@ async function fetchSuggestionsRaw (input: string) {
 
 const fetchSuggestions = debounce(fetchSuggestionsRaw, Number(props.rate))
 
-function onInput (input: string) {
-  input = input.trim()
+function onInput (input: string | null) {
+  input = input?.trim() || ''
   emit('input', input)
   fetchSuggestions(input)
 }
 
+// @todo move fields and path to props
 async function choose (item: DaDataItem) {
-  // @todo move to props
-  const fields = ['kpp', 'ogrn', 'okpo']
+  const data = item.data
+
+  const fields = ['inn', 'kpp', 'ogrn', 'okpo']
   for (const name of fields) {
-    emit('set-field-value', { field: name, value: item.data[name] })
+    emit('set-field-value', { field: name, value: data[name] })
     await nextTick()
   }
 
-  // @todo move to props
-  emit('input', item.data.inn)
+  emit('set-field-value', { field: 'name', value: data.name.full })
+  await nextTick()
+
+  emit('set-field-value', { field: 'opf', value: data.opf.full })
+  await nextTick()
+
+  emit('set-field-value', { field: 'address', value: data.address.unrestricted_value })
+  await nextTick()
 }
 
 function debounce (func, wait) {
