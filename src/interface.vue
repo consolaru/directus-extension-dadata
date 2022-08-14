@@ -32,6 +32,7 @@ const emit = defineEmits(['input', 'set-field-value'])
 
 const props = defineProps({
   token: { type: String, default: '' },
+  type: { type: String, default: 'org' },
   rate: { type: [Number, String], default: 300 },
   value: { type: String, default: '' },
   placeholder: { type: String, default: null },
@@ -43,7 +44,9 @@ const props = defineProps({
 
 const suggestions = ref([])
 
-const url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/party'
+const url = props.type === 'org'
+  ? 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/party'
+  : 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/bank'
 const options = {
   method: 'POST',
   mode: 'cors',
@@ -76,8 +79,15 @@ function onInput (input: string | null) {
   fetchSuggestions(input)
 }
 
-// @todo move fields and path to props
-async function choose (item: DaDataItem) {
+async function choose (item) {
+  if (props.type === 'org') {
+    await chooseOrg(item)
+  } else {
+    await chooseBank(item)
+  }
+}
+
+async function chooseOrg (item: Organization) {
   const data = item.data
 
   const fields = ['inn', 'kpp', 'ogrn', 'okpo']
@@ -86,14 +96,25 @@ async function choose (item: DaDataItem) {
     await nextTick()
   }
 
-  emit('set-field-value', { field: 'name', value: data.name.full })
+  emit('set-field-value', { field: 'name', value: data.name.short })
   await nextTick()
 
-  emit('set-field-value', { field: 'opf', value: data.opf.full })
+  emit('set-field-value', { field: 'opf', value: data.opf.short })
   await nextTick()
 
   emit('set-field-value', { field: 'address', value: data.address.unrestricted_value })
+}
+
+async function chooseBank (item: Bank) {
+  const data = item.data
+
+  emit('set-field-value', { field: 'bik', value: data.bic })
   await nextTick()
+
+  emit('set-field-value', { field: 'bank_name', value: data.name.short })
+  await nextTick()
+
+  emit('set-field-value', { field: 'kor_acc', value: data.correspondent_account })
 }
 
 function debounce (func, wait) {

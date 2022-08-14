@@ -21,6 +21,24 @@ export default defineInterface({
       },
     },
     {
+      field: 'type',
+      name: '$t:Тип',
+      type: 'string',
+      schema: {
+        default_value: 'org',
+      },
+      meta: {
+        width: 'half',
+        interface: 'select-dropdown',
+        options: {
+          choices: [
+            { text: 'Организация', value: 'org' },
+            { text: 'Банк', value: 'bank' },
+          ],
+        },
+      },
+    },
+    {
       field: 'rate',
       name: '$t:Задержка запроса',
       type: 'integer',
@@ -30,17 +48,6 @@ export default defineInterface({
       meta: {
         width: 'half',
         interface: 'input',
-      },
-    },
-    {
-      field: 'placeholder',
-      name: '$t:placeholder',
-      meta: {
-        width: 'half',
-        interface: 'system-input-translated-string',
-        options: {
-          placeholder: '$t:enter_a_placeholder',
-        },
       },
     },
     {
@@ -59,6 +66,17 @@ export default defineInterface({
       meta: {
         width: 'half',
         interface: 'select-icon',
+      },
+    },
+    {
+      field: 'placeholder',
+      name: '$t:placeholder',
+      meta: {
+        width: 'half',
+        interface: 'system-input-translated-string',
+        options: {
+          placeholder: '$t:enter_a_placeholder',
+        },
       },
     },
   ],

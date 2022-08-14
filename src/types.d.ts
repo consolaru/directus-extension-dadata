@@ -1,8 +1,8 @@
-interface DaDataRes {
+interface Suggestions {
   suggestions: DaDataItem[]
 }
 
-interface DaDataItem {
+interface Organization {
   value: string,
   unrestricted_value: string
   data: {
@@ -32,6 +32,20 @@ interface DaDataItem {
         "city_type_full": string
         "city": string
       }
+    }
+  }
+}
+
+interface Bank {
+  value: string,
+  unrestricted_value: string
+  data: {
+    bic: string
+    correspondent_account: string
+    name: {
+      payment: string
+      short: string
+      full: string | null
     }
   }
 }
