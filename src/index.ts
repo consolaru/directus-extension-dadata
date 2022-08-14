@@ -21,7 +21,7 @@ export default defineInterface({
       },
     },
     {
-      field: 'type',
+      field: 'entity',
       name: '$t:Тип',
       type: 'string',
       schema: {

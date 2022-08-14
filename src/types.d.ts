@@ -1,9 +1,17 @@
 interface Suggestions {
-  suggestions: DaDataItem[]
+  suggestions: SuggestionItem[]
 }
 
-interface Organization {
+interface SuggestionItem {
   value: string,
+  unrestricted_value: string
+  data: {
+    inn: string
+  }
+}
+
+interface Organization extends SuggestionItem {
+  value: string
   unrestricted_value: string
   data: {
     inn: string
@@ -36,10 +44,11 @@ interface Organization {
   }
 }
 
-interface Bank {
+interface Bank extends SuggestionItem {
   value: string,
   unrestricted_value: string
   data: {
+    inn: string
     bic: string
     correspondent_account: string
     name: {

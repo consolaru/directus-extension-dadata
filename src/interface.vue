@@ -19,7 +19,8 @@
     </template>
     <v-list v-if="suggestions.length > 0">
       <v-list-item v-for="item of suggestions" :key="item.data.inn" @click="() => choose(item)">
-        <v-list-item-content>ИНН: {{ item.data.inn }}, {{ item.value }}</v-list-item-content>
+        <v-list-item-content v-if="props.entity === 'bank'">{{ item.value }}</v-list-item-content>
+        <v-list-item-content v-else>ИНН: {{ item.data.inn }}, {{ item.value }}</v-list-item-content>
       </v-list-item>
     </v-list>
   </v-menu>
@@ -32,7 +33,7 @@ const emit = defineEmits(['input', 'set-field-value'])
 
 const props = defineProps({
   token: { type: String, default: '' },
-  type: { type: String, default: 'org' },
+  entity: { type: String, default: 'org' },
   rate: { type: [Number, String], default: 300 },
   value: { type: String, default: '' },
   placeholder: { type: String, default: null },
@@ -44,9 +45,9 @@ const props = defineProps({
 
 const suggestions = ref([])
 
-const url = props.type === 'org'
-  ? 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/party'
-  : 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/bank'
+const url = props.entity === 'bank'
+  ? 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/bank'
+  : 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/party'
 const options = {
   method: 'POST',
   mode: 'cors',
@@ -64,7 +65,7 @@ async function fetchSuggestionsRaw (input: string) {
   }
   try {
     const res = await fetch(url, Object.assign(options, { body: JSON.stringify({ query: input }) }))
-    const data = await res.json()
+    const data: Suggestions = await res.json()
     suggestions.value = data?.suggestions ?? []
   } catch (error) {
     console.error(error)
@@ -79,11 +80,11 @@ function onInput (input: string | null) {
   fetchSuggestions(input)
 }
 
-async function choose (item) {
-  if (props.type === 'org') {
-    await chooseOrg(item)
+async function choose (item: SuggestionItem) {
+  if (props.entity === 'bank') {
+    await chooseBank(item as Bank)
   } else {
-    await chooseBank(item)
+    await chooseOrg(item as Organization)
   }
 }
 
