@@ -1,0 +1,53 @@
+# curl -X POST
+#-H "Content-Type: application/json"
+#-H "Accept: application/json"
+#-H "Authorization: Token xxxxxx"
+#-d '{ "query": "сбербанк" }'
+#https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/party
+POST https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/party
+Accept: application/json
+Authorization: Token xxxxxx
+Content-Type: application/json
+
+{
+  "query": "7736050003",
+  "count": 1
+}
+
+###
+
+# curl -X POST
+#-H "Content-Type: application/json"
+#-H "Accept: application/json"
+#-H "Authorization: Token xxxxxx"
+#-d '{ "query": "москва хабар" }'
+#https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address
+POST https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address
+Accept: application/json
+Authorization: Token xxxxxx
+Content-Type: application/json
+
+{
+  "query": "москва",
+  "count": 1
+}
+
+###
+
+# curl -X POST
+#  -H "Content-Type: application/json"
+#  -H "Accept: application/json"
+#  -H "Authorization: Token xxxxxx"
+#  -d '{ "query": "044525225" }'
+#  https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/bank
+POST https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/bank
+Accept: application/json
+Authorization: Token xxxxxx
+Content-Type: application/json
+
+{
+  "query": "044525225",
+  "count": 1
+}
+
+###
